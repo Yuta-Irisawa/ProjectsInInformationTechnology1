@@ -1,0 +1,7 @@
+reuters2.txt
+Top 5 words in frequency
+1:luxury(30)
+2:-(18)
+3:brands(16)
+4:online(16)
+5:or(12)

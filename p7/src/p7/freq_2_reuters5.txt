@@ -1,0 +1,7 @@
+reuters5.txt
+Top 5 words in frequency
+1:tesla(34)
+2:model(22)
+3:company(20)
+4:3(16)
+5:sec(12)

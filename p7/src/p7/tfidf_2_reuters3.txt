@@ -1,0 +1,7 @@
+reuters3.txt
+Top 5 words in TF-IDF weight
+1:sanctions(0.032)
+2:embassy(0.018)
+3:oil(0.018)
+4:deal(0.014)
+5:anniversary(0.014)

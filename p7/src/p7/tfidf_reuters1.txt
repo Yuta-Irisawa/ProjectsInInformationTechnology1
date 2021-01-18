@@ -1,0 +1,7 @@
+reuters1.txt
+Top 5 words in TF-IDF weight
+1:Hyundai(0.027)
+2:Hyundaifs(0.011)
+3:dealers(0.006)
+4:market(0.006)
+5:auto(0.005)

@@ -1,0 +1,7 @@
+reuters5.txt
+Top 5 words in TF-IDF weight
+1:Tesla(0.041)
+2:Model(0.027)
+3:company(0.024)
+4:3(0.019)
+5:SEC(0.015)

@@ -1,0 +1,7 @@
+reuters4.txt
+Top 5 words in frequency
+1:trump(18)
+2:u.s.(14)
+3:election(12)
+4:republicans(12)
+5:obama(12)

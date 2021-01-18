@@ -1,0 +1,4 @@
+The average score of Saburo: 63.33
+The average report score of Saburo: 28.33
+The maximum score of Saburo: 80 [CC]
+The minimum score of Saburo: 40 [AA]

@@ -1,0 +1,7 @@
+reuters1.txt
+Top 5 words in frequency
+1:hyundai(50)
+2:percent(32)
+3:u.s.(24)
+4:chinese(20)
+5:hyundaifs(20)

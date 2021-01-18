@@ -1,0 +1,13 @@
+Title Transform
+Xtitle X axis
+Ytitle Y axis
+Xlower -8
+Xupper 8
+Xinterval 1
+Ylower -8
+Yupper 8
+Yinterval 1
+Scale 1
+Data
+8 1
+1 5

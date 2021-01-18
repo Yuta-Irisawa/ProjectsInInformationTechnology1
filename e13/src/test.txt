@@ -1,0 +1,24 @@
+Title Least Squares
+Xtitle X axis
+Ytitle Y axis
+Xlower -10
+Xupper 130
+Xinterval 14
+Ylower 10
+Yupper 190
+Yinterval 18
+polynominals 5
+Data
+4 85
+15 102
+23 70
+36 36
+43 44
+50 62
+66 93
+78 41
+83 30
+95 21
+104 25
+111 36
+120 53

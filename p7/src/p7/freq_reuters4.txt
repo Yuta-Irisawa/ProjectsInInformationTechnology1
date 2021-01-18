@@ -1,0 +1,7 @@
+reuters4.txt
+Top 5 words in frequency
+1:the(84)
+2:in(46)
+3:of(44)
+4:a(36)
+5:and(36)

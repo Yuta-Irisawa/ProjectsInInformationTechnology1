@@ -1,0 +1,7 @@
+data\reuters2.txt
+Top 5 words in frequency
+1:to(41)
+2:the(31)
+3:and(31)
+4:of(27)
+5:a(26)

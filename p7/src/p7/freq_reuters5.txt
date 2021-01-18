@@ -1,0 +1,7 @@
+reuters5.txt
+Top 5 words in frequency
+1:the(68)
+2:in(38)
+3:to(36)
+4:Tesla(34)
+5:a(30)

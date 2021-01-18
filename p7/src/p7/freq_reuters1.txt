@@ -1,0 +1,7 @@
+reuters1.txt
+Top 5 words in frequency
+1:the(112)
+2:to(90)
+3:and(84)
+4:a(74)
+5:in(72)

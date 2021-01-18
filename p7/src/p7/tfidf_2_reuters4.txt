@@ -1,0 +1,7 @@
+reuters4.txt
+Top 5 words in TF-IDF weight
+1:election(0.021)
+2:republicans(0.021)
+3:obama(0.021)
+4:trump(0.018)
+5:democrats(0.018)
