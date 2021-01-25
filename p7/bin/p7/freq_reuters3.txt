@@ -1,0 +1,7 @@
+data\reuters3.txt
+Top 5 words in frequency
+1:the(34)
+2:of(18)
+3:and(17)
+4:to(16)
+5:on(12)

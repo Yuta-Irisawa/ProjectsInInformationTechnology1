@@ -15,7 +15,6 @@ public class Matrix {
 	double[][] dataArray;
 	boolean append = false;
 	
-	// コンストラクタ
 	Matrix(){
 		
 	}
@@ -45,7 +44,7 @@ public class Matrix {
 				rows++;
 				ArrayList<Double> col = new ArrayList<Double>();
 				
-				String[] values = line.trim().split("[\\s]+", 0); // 1つor複数の空白で分割
+				String[] values = line.trim().split("[\\s]+", 0);
 				if(cols == 0) {
 					cols = values.length;
 				}else if(cols != values.length) {
@@ -70,7 +69,6 @@ public class Matrix {
 		
 		dataArray = new double[rows][cols];
 		
-		// ArrayList<ArrayList<Double>> data　-> double[][] data (COPY)
 		for(int i=0; i<rows; i++) {
 			for(int j=0; j<cols; j++) {
 				dataArray[i][j] = data.get(i).get(j);
@@ -200,7 +198,6 @@ public class Matrix {
 	}
 
 	public static void main(String[] args) {
-		// コマンドライン引数の数のチェック
 		if(args.length!=3) {
 			System.out.println("Matrix2D [matrix1] [matrix2] [output_file]");
 			System.exit(1);

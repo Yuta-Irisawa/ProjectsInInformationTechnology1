@@ -65,51 +65,67 @@ public class Matrix {
 			}
 		}
 	}
-	
-	double det(double EPS) {
+
+	double det() {
 		int N = rows;
 		int ip;
-		double amax; // —ñÅ‘å
+		double amax; // åˆ—æœ€å¤§
 		double tmp;
 		double alpha;
 		double det = 1;
 
 		for(int k=0; k < N; k++) {
-			//			/* ƒsƒ|ƒbƒg‚Ì‘I‘ğ */
-			//			amax = Math.abs(data[k][k]);
-			//			ip = k;
-			//			for(int i=k+1; i<N; i++) {
-			//				if(Math.abs(data[i][k])>amax) {
-			//					amax = Math.abs(data[i][k]);
-			//					ip = i;
-			//				}
-			//			}
-			//
-			//			/* sŒğŠ· */
-			//			if(ip!=k) {
-			//				// A‚ğsŒğŠ·
-			//				for(int j=k; j<N; j++) {
-			//					tmp = data[k][j];
-			//					data[k][j] = data[ip][j];
-			//					data[ip][j] = tmp;
-			//				}
-			//				det *= -1; // •²‘I‘ğˆê‰ñ–ˆ‚É-1‚ğ‚©‚¯‚é
-			//			}
+			/* ãƒ”ãƒãƒƒãƒˆã®é¸æŠ */
+			amax = Math.abs(data[k][k]);
+			ip = k;
+			for(int i=k+1; i<N; i++) {
+				if(Math.abs(data[i][k])>amax) {
+					amax = Math.abs(data[i][k]);
+					ip = i;
+				}
+			}
 
-			/* ‘OiÁ‹ */
+			/* è¡Œäº¤æ› */
+			if(ip!=k) {
+				// Aã‚’è¡Œäº¤æ›
+				for(int j=k; j<N; j++) {
+					tmp = data[k][j];
+					data[k][j] = data[ip][j];
+					data[ip][j] = tmp;
+				}
+				det *= -1; // æ¢è»¸é¸æŠä¸€å›æ¯ã«-1ã‚’ã‹ã‘ã‚‹
+			}
+
+			/* å‰é€²æ¶ˆå» */
 			for(int i=k+1; i<N; i++) {
 				alpha = - data[i][k] / data[k][k];
 				for(int j=k+1; j<N; j++) {
 					data[i][j] = data[i][j] + alpha * data[k][j];
 				}
 			}
-			det *= data[k][k];	// ‘OiÁ‹Œã‚Ì‚·‚×‚Ä‚Ì‘ÎŠp—v‘f‚ğ‚©‚¯‚é
+			det *= data[k][k];	// å‰é€²æ¶ˆå»å¾Œã®ã™ã¹ã¦ã®å¯¾è§’è¦ç´ ã‚’ã‹ã‘ã‚‹
 		}
 
 		return det;
 	}
-
 	
+	static Matrix dot(Matrix matrix1, Matrix matrix2) {		
+		int rows=matrix1.rows;
+		int cols=matrix2.cols;
+		Matrix matrix = new Matrix(rows, cols);
+		
+		for(int i=0;i<rows;i++) {		
+			for(int j=0;j<cols;j++) {
+				for(int k=0;k<cols;k++) {
+					matrix.data[i][j] += matrix1.data[i][k] * matrix2.data[k][j];
+				}
+			}
+		}
+		
+		return matrix;
+	}
+
+
 	public static void main(String[] args) {
 
 	}

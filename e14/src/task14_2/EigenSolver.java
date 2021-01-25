@@ -12,15 +12,15 @@ public class EigenSolver {
 	}
 
 	void solve(Matrix a) {
-//		// rowとcolが違ったらエラー出力
-//		for(int i=0; i<a.rows;i++) {
-//			for(int j=0; j<a.cols;j++) {
-//				if(a.data[i][j]!=a.data[j][i]) {
-//					System.out.println("Input matrix is not symmetric.");
-//					System.exit(1);
-//				}
-//			}
-//		}
+		// rowとcolが違ったらエラー出力
+		for(int i=0; i<a.rows;i++) {
+			for(int j=0; j<a.cols;j++) {
+				if(a.data[i][j]!=a.data[j][i]) {
+					System.out.println("Input matrix is not symmetric.");
+					System.exit(1);
+				}
+			}
+		}
 
 		int m = 0, k = 0;	/*index of rotated elements */
 		int it;		/* iteration counter */
@@ -122,13 +122,20 @@ public class EigenSolver {
 			}
 		}
 	}
+	
+	double getEigenValue(int i) {
+		return eigenValues.data[i];
+	}
+	
+	double eigenVectorsData(int i, int j) {
+		return eigenVectors.data[i][j];
+	}
 
 	public static void main(String[] args) {
 		Matrix a = new Matrix(args[0]);
 		EigenSolver e = new EigenSolver(a);
 
 		int n = a.rows;
-		a = new Matrix(args[0]);
 
 		for(int i=0; i<n; i++) {
 			System.out.println("===========     " + "lambda" + (i+1) + "     ===========");
@@ -146,7 +153,7 @@ public class EigenSolver {
 				System.out.println();
 			}
 
-			System.out.println("det(A - lambda * I)="+ans.det(EPS));
+			System.out.println("det(A - lambda * I)="+ans.det());
 
 			for(int j=0; j<n; j++){
 				for(int k=0; k<n; k++){

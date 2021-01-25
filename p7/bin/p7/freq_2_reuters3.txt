@@ -1,0 +1,7 @@
+reuters3.txt
+Top 5 words in frequency
+1:sanctions(14)
+2:u.s.(10)
+3:state(10)
+4:said(10)
+5:-(8)

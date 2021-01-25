@@ -56,12 +56,10 @@ class GraphPanel implements ActionListener {
 class GraphicPanel extends JPanel {
     private boolean display_plot;
     private DataPanel d;
-    
-    Vector[] pointsVec;	// plotする点のxのみの配列とyのみの配列
-    Vector approCoef;	// 近似関数の係数
-	Vector[] approPoints;	// 近似関数の点の配列
-	int n;	// n個の点
-    static int separateNum = 500;
+    Matrix points;		// 行列の要素
+	Vector[] eigenVectors;	// 固有ベクトルの配列
+	Vector[] vecPoints;		// 固有ベクトルの線を引く時の端の値
+	Matrix[][] blueVecPoints;	// A*(x,y)の線を引く時の端の値
     int beginX = 60;
 	int beginY = 30;
 	int width = 510;
@@ -90,33 +88,73 @@ class GraphicPanel extends JPanel {
             Float yLower = d.getYLower();
             Float yUpper = d.getYUpper();
             Float yInterval = d.getYInterval();
-            int polynominals = d.getPolynominals();
             Float dx = xUpper - xLower;
             Float dy = yUpper - yLower;
             
-            n = d.getNumberOfPoints();
-            pointsVec = new Vector[2];
-            for(int i=0; i<2; i++) {
-            	pointsVec[i] = new Vector(n);
+            int n = d.getNumberOfPoints();
+            points = new Matrix(n, n);
+            for(int i=0; i<n; i++) {
+            	points.data[i][0] = d.getPoint(i).x;
+            	points.data[i][1] = d.getPoint(i).y;
             }
             
+            EigenSolver e = new EigenSolver(points);
+            points = new Matrix(n, n);
+            
+            eigenVectors = new Vector[n];
+            
             for(int i=0; i<n; i++) {
-            	pointsVec[0].data[i] = d.getPoint(i).x;
-            	pointsVec[1].data[i] = d.getPoint(i).y;
-            } 
-            
-            approCoef = LeastSquare.minimize(pointsVec, polynominals);
-            
-            approPoints = new Vector[separateNum+1];
-    		float _x = xLower;
-    		for(int i=0; i<separateNum+1; i++) {
-    			approPoints[i] = new Vector(2);
-    			approPoints[i].data[0] = _x;
-    			for(int j=polynominals; j>=0; j--) {
-    				approPoints[i].data[1] += approCoef.data[j] * Math.pow(_x, j);
+    			Matrix ans = new Matrix(n, n);
+    			for(int j=0; j<n; j++){
+    				for(int k=0; k<n; k++){
+    					if(j==k) {
+    						ans.data[j][k]=points.data[j][k]-e.getEigenValue(i);
+    					}else {
+    						ans.data[j][k]=points.data[j][k];
+    					}
+    				}
     			}
-    			_x = _x + dx / separateNum;
-    		}
+
+    			for(int j=0; j<n; j++){
+    				for(int k=0; k<n; k++){
+    					if(j==k) {
+    						ans.data[j][k]=points.data[j][k]-e.getEigenValue(i);
+    					}else {
+    						ans.data[j][k]=points.data[j][k];
+    					}
+    				}
+    			}
+    			eigenVectors[i] = new Vector(n);
+    			for(int j=0; j<n; j++){
+    				double sum=0.0;
+    				for(int k=0; k<n; k++){
+    					sum+= ans.data[j][k]*e.eigenVectorsData(k, i);
+    				}
+    				eigenVectors[i].data[j] = sum;
+    			}
+            }
+            
+            // 固有ベクトルの線を書くための計算
+            vecPoints = new Vector[4];
+            int j=0;
+            for(int i=0; i<4; i+=2) {
+            	vecPoints[i] = new Vector(n);
+            	vecPoints[i+1] = new Vector(n);
+            	if(Math.abs(eigenVectors[j].data[0]) > Math.abs(eigenVectors[j].data[1])) {
+            		vecPoints[i].data[0] = xUpper;
+            		vecPoints[i+1].data[0] = xLower;
+            		double tmp = xUpper * eigenVectors[j].data[1] / eigenVectors[j].data[0];
+            		vecPoints[i].data[1] = tmp;
+            		vecPoints[i+1].data[1] = -tmp;
+            	}else {
+            		vecPoints[i].data[1] = yUpper;
+            		vecPoints[i+1].data[1] = yLower;
+            		double tmp = yUpper * eigenVectors[j].data[0] / eigenVectors[j].data[1];
+            		vecPoints[i].data[0] = tmp;
+            		vecPoints[i+1].data[0] = -tmp;
+            	}
+            	j++;
+            }
     		
     		/* ========= プロット前の枠組作成 =========*/
     		g2d.setPaint(Color.white);
@@ -157,40 +195,59 @@ class GraphicPanel extends JPanel {
     		/* ================================*/
     		
     		/* ============ プロット作業 =========== */   		
-    		int pointsNum = n;
-    		
-    		for(int i=0; i<pointsNum; i++) {
-    			float xi = width * (getPointX(i) - xLower) / dx + beginX;
-    			float yi = -height * (getPointY(i) - yLower) / dy + endY;
+    		for(int i=0; i<4; i+=2) {
+    			float xi = width * (getVecPointsX(i) - xLower) / dx + beginX;
+    			float yi = -height * (getVecPointsY(i) - yLower) / dy + endY;
+    			float xi1 = width * (getVecPointsX(i+1) - xLower) / dx + beginX;
+    			float yi1 = -height * (getVecPointsY(i+1) - yLower) / dy + endY;
     			
-    			xi -= diam / 2;
-    			yi -= diam / 2;
-    			
-    			// 点をプロット
-    			if(getPointX(i)>=xLower && getPointX(i)<=xUpper &&
-    					getPointY(i)>=yLower && getPointY(i)<=yUpper) {
-    				g2d.setColor(Color.red);
-        			g2d.fill(new Ellipse2D.Float(xi, yi, diam, diam));
-    			}
-    		}
-    		
-    		for(int i=0; i<separateNum; i++) {
-    			float xi = width * (getApproPointX(i) - xLower) / dx + beginX;
-    			float yi = -height * (getApproPointY(i) - yLower) / dy + endY;
-    			float xi1 = width * (getApproPointX(i+1) - xLower) / dx + beginX;
-    			float yi1 = -height * (getApproPointY(i+1) - yLower) / dy + endY;
-    			
-    			// 線を引く ※色(30, 30, 30, 180)
-    			g2d.setColor(new Color(30, 30, 30, 180));
-    			if(getApproPointY(i)>=yLower && getApproPointY(i+1)<=yUpper) {
+    			g2d.setColor(Color.red);
+    			if(getVecPointsY(i)>=yLower && getVecPointsY(i+1)<=yUpper) {
     				g2d.draw(new Line2D.Float(xi, yi, xi1, yi1));
     			}
-    		}	
-    		/* ================================*/
+    		}
+            
+    		/* ~~~~~~~~~~ 青い線を引く作業 ~~~~~~~~~ */
+    		blueVecPoints = new Matrix[(int)(dx-1)][(int)(dy-1)];
+    		points = new Matrix(n, n);
+            for(int i=0; i<n; i++) {
+            	points.data[i][0] = d.getPoint(i).x;
+            	points.data[i][1] = d.getPoint(i).y;
+            }
+    		int row=0, col=0;
+            for(float y=yUpper-1; y>yLower; y-=yInterval) {
+            	for(float x=xLower+1; x<xUpper; x+=xInterval) {
+            		Matrix pointXY = new Matrix(1, 2);
+            		pointXY.data[0][0] = x;
+            		pointXY.data[0][1] = y;
+            		
+            		blueVecPoints[row][col] = Matrix.dot(pointXY, points);
+            		double l = Math.sqrt(Math.pow(getBlueVecPointsX(row, col) - x, 2) 
+            				+ Math.pow(getBlueVecPointsY(row, col) - y, 2));
+            		blueVecPoints[row][col].data[0][0] = x + (getBlueVecPointsX(row, col) - x) / l;
+            		blueVecPoints[row][col].data[0][1] = y + (getBlueVecPointsY(row, col) - y) / l;
+            		
+            		float xi = width * (x - xLower) / dx + beginX;
+        			float yi = -height * (y - yLower) / dy + endY;
+        			float xi1 = width * (getBlueVecPointsX(row, col) - xLower) / dx + beginX;
+        			float yi1 = -height * (getBlueVecPointsY(row, col) - yLower) / dy + endY;
+        			
+        			g2d.setColor(Color.blue);
+        			g2d.draw(new Line2D.Float(xi, yi, xi1, yi1));
+        			
+            		col++;
+            	}
+            	System.out.println();
+            	row++;
+            	col=0;
+            }
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            
+    		/* ================================ */
         }
     }
     
-    float getPointX(int i) {
+	float getPointX(int i) {
     	return d.getPoint(i).x;
     }
     
@@ -198,14 +255,22 @@ class GraphicPanel extends JPanel {
     	return d.getPoint(i).y;
     }
     
-    float getApproPointX(int i) {
-		return (float)approPoints[i].data[0];
+    float getVecPointsX(int i) {
+		return (float)vecPoints[i].data[0];
 	}
 	
-	float getApproPointY(int i) {
-		return (float)approPoints[i].data[1];
+	float getVecPointsY(int i) {
+		return (float)vecPoints[i].data[1];
 	}
-
+	
+	float getBlueVecPointsX(int row, int col) {
+		return (float)blueVecPoints[row][col].data[0][0];
+	}
+	
+	float getBlueVecPointsY(int row, int col) {
+		return (float)blueVecPoints[row][col].data[0][1];
+	}
+	
     void setDataPanel(DataPanel new_d) {
         d = new_d;
     }
@@ -213,7 +278,7 @@ class GraphicPanel extends JPanel {
     void setDisplayPlot(boolean new_display) {
         display_plot = new_display;
     }
-
+    
     private void drawCenteredString(Graphics2D g2d, String string,
                                     int x0, int y0, float angle) {
         FontRenderContext frc = g2d.getFontRenderContext();

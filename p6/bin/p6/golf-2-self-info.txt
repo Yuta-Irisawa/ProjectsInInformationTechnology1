@@ -1,0 +1,4 @@
+Information source: golf-2.txt
+Self-Information of "Play": 0.637
+Self-Information of "notPlay": 1.485
+Information of "golf-2.txt": 0.940

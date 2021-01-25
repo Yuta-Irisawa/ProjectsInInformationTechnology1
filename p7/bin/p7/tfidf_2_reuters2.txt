@@ -1,0 +1,7 @@
+reuters2.txt
+Top 5 words in TF-IDF weight
+1:luxury(0.034)
+2:brands(0.018)
+3:online(0.018)
+4:like(0.013)
+5:jd(0.011)

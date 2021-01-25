@@ -1,0 +1,7 @@
+reuters3.txt
+Top 5 words in TF-IDF weight
+1:sanctions(0.021)
+2:oil(0.012)
+3:Iranfs(0.009)
+4:deal(0.009)
+5:anniversary(0.009)
