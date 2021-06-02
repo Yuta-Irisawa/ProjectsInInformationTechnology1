@@ -1,1 +1,1 @@
-"# ProjectsInInformationTechnology1" 
+# ProjectsInInformationTechnology1
